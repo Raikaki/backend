@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'com.paypal.sdk:rest-api-sdk:1.14.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation group: 'com.paypal.sdk', name: 'checkout-sdk', version: '1.0.2'
+    implementation group: 'com.paypal.sdk', name: 'paypal-core', version: '1.6.5'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation('io.jsonwebtoken:jjwt:0.9.1')
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: '3.2.5'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.5'
+    implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.1.0.M3'
+    implementation 'com.cloudinary:cloudinary-http44:1.29.0'
+
+}
+ext['spring-security.version']='6.2.4'
+ext['spring.version']='6.1.6'
+tasks.named('test') {
+    useJUnitPlatform()
+}
