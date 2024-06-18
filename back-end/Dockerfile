@@ -25,7 +25,7 @@ FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
 # Copy the JAR file from the first stage
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/website-0.0.1-SNAPSHOT.jar app.jar
 
 # Set the entrypoint to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
