@@ -20,9 +20,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     protected String determineRedirectUrl(Authentication authentication) {
         String provider = authentication.getPrincipal().toString();
         if (provider.contains("google")) {
-            return "http://localhost:3000/login-google";
+            return "https://animewebnew.netlify.app/login-google";
         } else
-            return "http://localhost:3000/login-facebook";
+            return "https://animewebnew.netlify.app/login-facebook";
     }
 
 }

@@ -45,7 +45,7 @@ public class PaymentController {
     @PostMapping("/create-payment")
     public ResponseEntity<?> createAndExecutePayment(@RequestBody PaymentRequestDTO request) {
         try {
-            Payment payment = payPalService.createPayment(request.getAmount(), request.getCurrency(), request.getMethod(), request.getIntent(), request.getDescription(), "http://localhost:3000/servicePack", "http://localhost:3000/execute-payment");
+            Payment payment = payPalService.createPayment(request.getAmount(), request.getCurrency(), request.getMethod(), request.getIntent(), request.getDescription(), "https://animewebnew.netlify.app/servicePack", "https://animewebnew.netlify.app/execute-payment");
             String approvalUrl = null;
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
