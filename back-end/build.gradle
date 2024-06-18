@@ -52,10 +52,19 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.5'
     implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.1.0.M3'
     implementation 'com.cloudinary:cloudinary-http44:1.29.0'
-
 }
-ext['spring-security.version']='6.2.4'
-ext['spring.version']='6.1.6'
+
+ext['spring-security.version'] = '6.2.4'
+ext['spring.version'] = '6.1.6'
+
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+    enabled = true
+}
+
+bootWar {
+    enabled = true
 }
