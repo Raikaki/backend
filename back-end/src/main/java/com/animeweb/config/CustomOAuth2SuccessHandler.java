@@ -37,12 +37,10 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String redirectUrl;
 
         if (provider.contains("google")) {
-            redirectUrl = "http://localhost:3000/login-google";
+            redirectUrl = "https://animewebnew.netlify.app/login-google";
         } else {
-            redirectUrl = "http://localhost:3000/login-facebook";
+            redirectUrl = "https://animewebnew.netlify.app/login-facebook";
         }
-
-        // Add the sessionId as a query parameter to the redirect URL
         if (sessionId != null) {
             redirectUrl = redirectUrl + "?sessionId=" + sessionId;
         }
