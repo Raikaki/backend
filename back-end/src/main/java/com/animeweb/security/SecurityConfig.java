@@ -60,44 +60,43 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-//                .authorizeHttpRequests(request ->
-//                        request.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-//                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-//                                .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
-//                                .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
-//                                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
-//                                .requestMatchers("/").hasRole("ADMIN")
-//                                .anyRequest().permitAll())
-//                .oauth2Login(oauth2 -> oauth2
-//                        .successHandler(customOAuth2SuccessHandler)
-//                        .permitAll())
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .authenticationEntryPoint(authenticationEntryPoint())
-//                        .accessDeniedHandler(accessDeniedHandler())
-//                );
-//        return http.build();
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS configuration
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers("/").hasRole("ADMIN")
+                                .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(customOAuth2SuccessHandler) // Use custom success handler
-                        .permitAll());
-
-
+                        .successHandler(customOAuth2SuccessHandler)
+                        .permitAll())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
+                );
         return http.build();
+//        http.csrf(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS configuration
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .anyRequest().permitAll())
+//                .oauth2Login(oauth2 -> oauth2
+//                        .successHandler(customOAuth2SuccessHandler) // Use custom success handler
+//                        .permitAll());
+//
+//
+//        return http.build();
     }
 
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Allow access from all origins
+        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app")); // Specify your frontend domain
         configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
         configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
