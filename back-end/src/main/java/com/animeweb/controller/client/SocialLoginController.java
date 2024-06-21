@@ -33,7 +33,7 @@ public class SocialLoginController {
     private JwtGenerator jwtGenerator;
     @Autowired
     RoleRepository roleRepository;
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "https://animewebnew.netlify.app")
     @GetMapping("/login/google")
     public ResponseEntity<AuthResponseDTO> getUser(@AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
         String email = (String) oAuth2User.getAttribute("email");
@@ -62,7 +62,7 @@ public class SocialLoginController {
         }
 
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "https://animewebnew.netlify.app")
     @GetMapping("/login/facebook")
     public ResponseEntity<AuthResponseDTO> getUserFacebook(@AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
         String email = (String) oAuth2User.getAttribute("email");
