@@ -15,7 +15,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String sessionId = getSessionIdFromCookie(request);
-
+        if (sessionId != null) {
+            response.setHeader("JSESSIONID", sessionId);
+        }
         String redirectUrl = determineRedirectUrl(authentication, sessionId);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
