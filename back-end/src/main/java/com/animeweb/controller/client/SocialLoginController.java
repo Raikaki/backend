@@ -36,6 +36,7 @@ public class SocialLoginController {
     @CrossOrigin(origins = "https://animewebnew.netlify.app")
     @GetMapping("/login/google")
     public ResponseEntity<AuthResponseDTO> getUser(@AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
+        System.out.println("getUser");
         String email = (String) oAuth2User.getAttribute("email");
         String name = (String) oAuth2User.getAttribute("name");
         String givenName = (String) oAuth2User.getAttribute("given_name");
