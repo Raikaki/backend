@@ -1,6 +1,5 @@
 package com.animeweb.security;
 
-
 import com.animeweb.config.CustomOAuth2SuccessHandler;
 import com.animeweb.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,21 +22,25 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
     @Autowired
     UserServiceImpl userService;
+
     @Autowired
     CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+
     @Autowired
     JwtAuthEntryPoint authEntryPoint;
+
     @Autowired
     CustomJwtDecoder jwtDecoder;
+
     private final String[] PUBLIC_ENDPOINTS = {
             "/follow/**",
             "/rates/**",
@@ -51,23 +54,22 @@ public class SecurityConfig {
             "/static/imgs/**",
             "/servicePack/**",
             "/comment/**",
-            "/login/**",
             "/login/google",
             "/login/facebook"
     };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(request->
-                        request.requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.PATCH,PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
+        http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
                                 .requestMatchers("/").hasRole("ADMIN")
                                 .anyRequest().permitAll())
-//                                .anyRequest().authenticated()).oauth2ResourceServer(oauth2->oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
-//                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))).
-
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customOAuth2SuccessHandler)
                         .permitAll())
@@ -81,9 +83,9 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Cho phép truy cập từ tất cả các nguồn
-        configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
-        configuration.addAllowedHeader("*"); // Cho phép tất cả các tiêu đề
+        configuration.addAllowedOrigin("*"); // Allow access from all origins
+        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
+        configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app"));
         configuration.setAllowCredentials(true);
 
@@ -91,6 +93,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) ->
@@ -104,15 +107,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
+
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
