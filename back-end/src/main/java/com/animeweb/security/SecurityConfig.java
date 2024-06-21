@@ -51,6 +51,7 @@ public class SecurityConfig {
             "/static/imgs/**",
             "/servicePack/**",
             "/comment/**",
+            "/login-google"
 
     };
     @Bean
