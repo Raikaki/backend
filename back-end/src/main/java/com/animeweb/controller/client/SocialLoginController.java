@@ -52,6 +52,7 @@ public class SocialLoginController {
             socialUser1 = new SocialUser(null, name, pictureUrl, pass, email, name, null, 2, now, null, null, true, id, null, null, null);
             socialUser1.setRole(roles);
             User  socialUser2 = SocialUserMapper.mapToEntity(socialUser1);
+            socialUser2.setIsActive(true);
             socialUser2.setRoles(Collections.singletonList(roles));
             accountOAuth2UserService.createAccount(socialUser2);
            token = jwtGenerator.generateToken(socialUser2);
