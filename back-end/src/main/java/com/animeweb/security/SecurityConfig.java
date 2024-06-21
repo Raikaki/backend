@@ -56,30 +56,26 @@ public class SecurityConfig {
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwtConfigurer -> jwtConfigurer
-                                .decoder(jwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())))
-                .oauth2Login(oauth2 -> oauth2
+        http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(request->
+                        request.requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PATCH,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers("/").permitAll()
+//                                .requestMatchers("/").hasRole("ADMIN")
+                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()).oauth2ResourceServer(oauth2->oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))).
+                oauth2Login(oauth2 -> oauth2
                         .successHandler(customOAuth2SuccessHandler)
                         .permitAll())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint())
-                        .accessDeniedHandler(accessDeniedHandler()));
-
+                        .accessDeniedHandler(accessDeniedHandler())
+                );
         return http.build();
     }
-
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
