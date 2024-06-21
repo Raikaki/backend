@@ -50,8 +50,7 @@ public class SecurityConfig {
             "/topView/**",
             "/static/imgs/**",
             "/servicePack/**",
-            "/comment/**",
-            "/login/google"
+            "/comment/**"
 
     };
     @Bean
@@ -78,9 +77,12 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://animewebnew.netlify.app");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
+        configuration.addAllowedOrigin("*"); // Cho phép truy cập từ tất cả các nguồn
+        configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
+        configuration.addAllowedHeader("*"); // Cho phép tất cả các tiêu đề
+        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app"));
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
