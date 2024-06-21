@@ -51,8 +51,9 @@ public class SecurityConfig {
             "/static/imgs/**",
             "/servicePack/**",
             "/comment/**",
-            "/login/**"
-
+            "/login/**",
+            "/login/google",
+            "/login/facebook"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
