@@ -1,5 +1,6 @@
 package com.animeweb.config;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -13,16 +14,40 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        String redirectUrl = determineRedirectUrl(authentication);
+        Cookie[] cookies = request.getCookies();
+
+        String sessionId = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("JSESSIONID".equals(cookie.getName())) {
+                    sessionId = cookie.getValue();
+                    System.out.println("JSESSIONID = " + sessionId);
+                    break;
+                }
+            }
+        } else {
+            System.out.println("No cookies found in the request");
+        }
+        String redirectUrl = determineRedirectUrl(authentication,sessionId);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 
-    protected String determineRedirectUrl(Authentication authentication) {
+    protected String determineRedirectUrl(Authentication authentication, String sessionId) {
         String provider = authentication.getPrincipal().toString();
+        String redirectUrl;
+
         if (provider.contains("google")) {
-            return "https://animewebnew.netlify.app/login-google";
-        } else
-            return "https://animewebnew.netlify.app/login-facebook";
+            redirectUrl = "http://localhost:3000/login-google";
+        } else {
+            redirectUrl = "http://localhost:3000/login-facebook";
+        }
+
+        // Add the sessionId as a query parameter to the redirect URL
+        if (sessionId != null) {
+            redirectUrl = redirectUrl + "?sessionId=" + sessionId;
+        }
+
+        return redirectUrl;
     }
 
 }
