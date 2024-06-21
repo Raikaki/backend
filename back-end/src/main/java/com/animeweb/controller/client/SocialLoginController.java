@@ -35,7 +35,7 @@ public class SocialLoginController {
     @Autowired
     RoleRepository roleRepository;
 
-    @GetMapping("/login-google")
+    @GetMapping("/login/google")
     public ResponseEntity<AuthResponseDTO> getUser(@RequestParam("sessionId") String sessionId, @AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
         System.out.println("getUser");
 
