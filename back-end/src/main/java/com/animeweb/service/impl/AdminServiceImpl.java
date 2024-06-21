@@ -67,6 +67,7 @@ public class AdminServiceImpl implements AdminService {
             newUser.setFullName(request.name() != null ? request.name() : newUser.getFullName());
             newUser.setEmail(request.email() != null ? request.email() : newUser.getEmail());
             newUser.setUpdatedAt(new Date());
+            newUser.setIsActive(user.get().getIsActive());
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
             newUser.setPassword(request.password() != null ? passwordEncoder.encode(request.password()) : newUser.getPassword());

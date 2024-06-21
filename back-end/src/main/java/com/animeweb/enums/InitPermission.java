@@ -29,11 +29,18 @@ public class InitPermission {
        movieManagerPer.add("edit_serie");
        movieManagerPer.add("delete_serie");
 
+
+       movieManagerPer.add("top5_view");
+
+
        List<String> serviceManagerPer = new ArrayList<>();
        serviceManagerPer.add("view_services");
        serviceManagerPer.add("add_service");
        serviceManagerPer.add("edit_service");
        serviceManagerPer.add("delete_service");
+
+
+       serviceManagerPer.add("view_revenue");
 
        List<String> userManagerPer = new ArrayList<>();
        userManagerPer.add("view_users");
@@ -44,6 +51,10 @@ public class InitPermission {
        userManagerPer.add("edit_roles");
        userManagerPer.add("add_roles");
        userManagerPer.add("edit_user_roles");
+
+
+       userManagerPer.add("deactivate_user");
+
 
        ROLE_PERMISSIONS.put(Role.MOVIE_MANAGER.name(),movieManagerPer);
        ROLE_PERMISSIONS.put(Role.SERVICES_MANGER.name(),serviceManagerPer);

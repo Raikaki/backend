@@ -18,7 +18,6 @@ import com.animeweb.service.impl.UserPackedServiceImpl;
 import com.animeweb.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -53,32 +52,6 @@ public class ServicePackController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/all/user/bought")
-    public ResponseEntity<List<UserDTO>> GetAllUserBought() {
-        return ResponseEntity.ok(userPackedService.GetAllUserBought());
-    }
 
-    @GetMapping("/hot/month")
-    public ResponseEntity<List<DashboardView>> getUserPackedBoughtMostByMonth() {
-        return ResponseEntity.ok(servicePackService.getUserPackedBoughtMostByMonth());
-    }
-
-    @GetMapping("/hot/year")
-    public ResponseEntity<List<DashboardView>> getUserPackedBoughtMostByYear() {
-        return ResponseEntity.ok(servicePackService.getUserPackedBoughtMostByYear());
-    }
-    @GetMapping("/getAll/{idUser}")
-    public ResponseEntity<List<UserPackedDTO>> getAllByUser(@PathVariable("idUser") Long idUser) {
-        List<UserPacked> userPackeds = userPackedService.findAllUserPackedById(userService.findUserById(idUser));
-        List<UserPackedDTO> userPackedDTOS = new ArrayList<>();
-        for (UserPacked u : userPackeds) {
-            UserPackedDTO userPackedDTO = UserPackedMapper.mapToDTO(u);
-            userPackedDTO.setStatus(u.getStatus());
-            userPackedDTO.setId(u.getId());
-            userPackedDTO.setCreatedAt(u.getCreatedAt());
-            userPackedDTOS.add(userPackedDTO);
-        }
-        return ResponseEntity.ok(userPackedDTOS);
-    }
 
 }

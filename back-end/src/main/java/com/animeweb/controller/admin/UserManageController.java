@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,14 @@ public class UserManageController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('add_user') or hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@ModelAttribute CreateUserRequest request) throws IOException {
         adminService.createUser(request);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('edit_user') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
                                            @ModelAttribute UpdateUserRequest request) throws IOException {
         adminService.updateUser(id, request);
@@ -43,18 +46,21 @@ public class UserManageController {
     }
 
     @PatchMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('delete_user') or hasRole('ADMIN')")
     public ResponseEntity<User> delete(@PathVariable Long id) {
         adminService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/deactivate/{id}")
+    @PreAuthorize("hasAuthority('deactivate_user') or hasRole('ADMIN')")
     public ResponseEntity<User> deactivateUser(@PathVariable Long id) {
         adminService.deactivateUser(id);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/role/{id}")
+    @PreAuthorize("hasAuthority('edit_user_roles') or hasRole('ADMIN')")
     public ResponseEntity<User> setRole(@PathVariable Long id, @RequestBody Long roleId) {
         adminService.setRole(id, roleId);
         return ResponseEntity.ok().build();
