@@ -64,7 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error").permitAll() 
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
