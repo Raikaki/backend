@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -34,8 +35,8 @@ public class SocialLoginController {
     @Autowired
     RoleRepository roleRepository;
     @CrossOrigin(origins = "https://animewebnew.netlify.app")
-    @GetMapping("/login/google")
-    public ResponseEntity<AuthResponseDTO> getUser(@AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
+    @GetMapping("/login-google")
+    public ResponseEntity<AuthResponseDTO> getUser(@RequestParam("sessionId") String sessionId, @AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
         System.out.println("getUser");
 
         String email = (String) oAuth2User.getAttribute("email");
@@ -43,28 +44,33 @@ public class SocialLoginController {
         String givenName = (String) oAuth2User.getAttribute("given_name");
         String id = (String) oAuth2User.getAttribute("sub");
         String pictureUrl = (String) oAuth2User.getAttribute("picture");
+
         User socialUser = accountOAuth2UserService.findByEmailGoogle(email);
-        SocialUser socialUser1 =null;
+        SocialUser socialUser1;
         String token = "";
         Date now = java.sql.Date.valueOf(LocalDate.now());
+
         if (socialUser == null) {
-            String pass= HashAlgorithm.hashText(id,HashAlgorithm.SHA256);
+            String pass = HashAlgorithm.hashText(id, HashAlgorithm.SHA256);
             Role roles = roleRepository.findByNameAndStatusTrue("USER");
+
             socialUser1 = new SocialUser(null, name, pictureUrl, pass, email, name, null, 2, now, null, null, true, id, null, null, null);
             socialUser1.setRole(roles);
-            User  socialUser2 = SocialUserMapper.mapToEntity(socialUser1);
+
+            User socialUser2 = SocialUserMapper.mapToEntity(socialUser1);
             socialUser2.setIsActive(true);
             socialUser2.setRoles(Collections.singletonList(roles));
+
             accountOAuth2UserService.createAccount(socialUser2);
-           token = jwtGenerator.generateToken(socialUser2);
-            return new ResponseEntity<>(new AuthResponseDTO(token,true),HttpStatus.OK);
-        }else{
-            token =  jwtGenerator.generateToken(socialUser);
-            return new ResponseEntity<>(new AuthResponseDTO(token,true), HttpStatus.OK);
+            token = jwtGenerator.generateToken(socialUser2);
 
+            return new ResponseEntity<>(new AuthResponseDTO(token, true), HttpStatus.OK);
+        } else {
+            token = jwtGenerator.generateToken(socialUser);
+            return new ResponseEntity<>(new AuthResponseDTO(token, true), HttpStatus.OK);
         }
-
     }
+
     @CrossOrigin(origins = "https://animewebnew.netlify.app")
     @GetMapping("/login/facebook")
     public ResponseEntity<AuthResponseDTO> getUserFacebook(@AuthenticationPrincipal OAuth2User oAuth2User) throws NoSuchAlgorithmException {
