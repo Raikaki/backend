@@ -14,7 +14,7 @@ RUN gradle clean build -x test
 FROM openjdk:17.0.1-jdk-slim
 
 # Copy file jar từ bước build trước
-COPY --from=build /app/build/libs/demo-0.0.1-SNAPSHOT.jar demo.jar
+COPY --from=build /app/build/libs/website-0.0.1-SNAPSHOT.jar demo.jar
 
 # Expose cổng 8080
 EXPOSE 8080
