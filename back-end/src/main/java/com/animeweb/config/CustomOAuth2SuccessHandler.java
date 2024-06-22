@@ -18,13 +18,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String sessionId = getSessionIdFromCookie(request);
         if (sessionId != null) {
-            response.setHeader("JSESSIONID", sessionId);
+            response.setHeader("Set-Cookie", "JSESSIONID=" + sessionId + "; HttpOnly; SameSite=None; Secure");
         }
-        String encodedUser = Base64.getEncoder().encodeToString(authentication.getPrincipal().toString().getBytes(StandardCharsets.UTF_8));
         String redirectUrl = determineRedirectUrl(authentication);
         try{
-            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId+"&oAuth2User="+encodedUser);
-
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId);
         }catch (Exception e){
             System.out.println("loi ne: " +e.getMessage());
         }

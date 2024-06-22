@@ -54,8 +54,7 @@ public class SecurityConfig {
             "/static/imgs/**",
             "/servicePack/**",
             "/comment/**",
-            "/login/google",
-            "/login/facebook"
+            "/login/**"
     };
 
     @Bean
@@ -109,7 +108,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("*"); // Cho phép truy cập từ tất cả các nguồn
         configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
         configuration.addAllowedHeader("*"); // Cho phép tất cả các tiêu đề
-        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com"));
+//        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
