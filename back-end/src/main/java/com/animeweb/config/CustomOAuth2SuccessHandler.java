@@ -18,6 +18,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         if (sessionId != null) {
             response.setHeader("JSESSIONID", sessionId);
         }
+        System.out.println(sessionId);
+        System.out.println(authentication.getPrincipal().toString());
         String redirectUrl = determineRedirectUrl(authentication, sessionId);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
