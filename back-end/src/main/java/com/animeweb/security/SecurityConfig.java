@@ -94,11 +94,11 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-1-gisb.onrender.com")); // Specify your frontend domain
+//        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-1-gisb.onrender.com")); // Specify your frontend domain
         configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true);
-
+        configuration.setAllowedOriginPatterns(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
