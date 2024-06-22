@@ -60,17 +60,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.PATCH, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers(HttpMethod.DELETE, PUBLIC_ENDPOINTS).permitAll()
+        http.csrf(AbstractHttpConfigurer::disable).cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(request->
+                        request.requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PATCH,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.PUT,PUBLIC_ENDPOINTS).permitAll()
+                                .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
                                 .requestMatchers("/").hasRole("ADMIN")
-                                .anyRequest().permitAll())
-                .oauth2Login(oauth2 -> oauth2
+                                .anyRequest().authenticated()).oauth2ResourceServer(oauth2->oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))).
+                oauth2Login(oauth2 -> oauth2
                         .successHandler(customOAuth2SuccessHandler)
                         .permitAll())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -78,6 +77,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler())
                 );
         return http.build();
+    }
 //        http.csrf(AbstractHttpConfigurer::disable)
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS configuration
 //                .authorizeHttpRequests(authorize -> authorize
@@ -88,17 +88,29 @@ public class SecurityConfig {
 //
 //
 //        return http.build();
-    }
+//    }
 
 
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com")); // Specify your frontend domain
+//        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
+//        configuration.addAllowedHeader("*"); // Allow all headers
+//        configuration.setAllowCredentials(true);
+////        configuration.setAllowedOriginPatterns(List.of("*"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com")); // Specify your frontend domain
-        configuration.addAllowedMethod("*"); // Allow all methods (GET, POST, PUT, DELETE, etc.)
-        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addAllowedOrigin("*"); // Cho phép truy cập từ tất cả các nguồn
+        configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
+        configuration.addAllowedHeader("*"); // Cho phép tất cả các tiêu đề
+        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com"));
         configuration.setAllowCredentials(true);
-//        configuration.setAllowedOriginPatterns(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
