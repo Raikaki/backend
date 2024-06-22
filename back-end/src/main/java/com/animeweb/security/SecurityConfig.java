@@ -105,12 +105,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Cho phép truy cập từ tất cả các nguồn
-        configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE, v.v.)
-        configuration.addAllowedHeader("*"); // Cho phép tất cả các tiêu đề
-        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("*"));
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowedOrigins(List.of("https://animewebnew.netlify.app","https://backend-wpxi.onrender.com"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

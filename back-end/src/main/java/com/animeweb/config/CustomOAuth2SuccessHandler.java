@@ -22,7 +22,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
         String redirectUrl = determineRedirectUrl(authentication);
         try{
-            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId);
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         }catch (Exception e){
             System.out.println("loi ne: " +e.getMessage());
         }
