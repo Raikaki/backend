@@ -68,10 +68,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE,PUBLIC_ENDPOINTS).permitAll()
                                 .requestMatchers("/").hasRole("ADMIN")
                                 .anyRequest().authenticated()).oauth2ResourceServer(oauth2->oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter())));
-//                oauth2Login(oauth2 -> oauth2
-//                        .successHandler(customOAuth2SuccessHandler)
-//                        .permitAll())
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(customOAuth2SuccessHandler)
+                        .permitAll());
 //                .exceptionHandling(exceptionHandling -> exceptionHandling
 //                        .authenticationEntryPoint(authenticationEntryPoint())
 //                        .accessDeniedHandler(accessDeniedHandler())
