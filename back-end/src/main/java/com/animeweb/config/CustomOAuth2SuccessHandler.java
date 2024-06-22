@@ -18,7 +18,7 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String sessionId = getSessionIdFromCookie(request);
         if (sessionId != null) {
-            response.setHeader("Set-Cookie", "JSESSIONID=" + sessionId + "; HttpOnly; SameSite=None; Secure");
+            response.setHeader("Set-Cookie", "JSESSIONID=" + sessionId + "; HttpOnly; SameSite=Lax;");
         }
         String redirectUrl = determineRedirectUrl(authentication);
         try{
