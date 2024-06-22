@@ -1,6 +1,5 @@
 package com.animeweb.config;
 
-import com.animeweb.dto.oauth.AuthResponseDTO;
 import com.animeweb.dto.user.SocialUser;
 import com.animeweb.entities.Role;
 import com.animeweb.entities.User;
@@ -12,30 +11,28 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 
 @Component
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     @Autowired
-    AccountOAuth2UserService accountOAuth2UserService;
+    private AccountOAuth2UserService accountOAuth2UserService;
     @Autowired
-    JwtGenerator jwtGenerator;
+    private JwtGenerator jwtGenerator;
     @Override
+    @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String redirectUrl = determineRedirectUrl(authentication);
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -57,7 +54,6 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             throw new RuntimeException(e);
         }
         Role roles = roleRepository.findByNameAndStatusTrue("USER");
-
         socialUser1 = new SocialUser(null, name, pictureUrl, pass, email, name, null, 2, now, null, null, true, id, null, null, null);
         socialUser1.setRole(roles);
 
