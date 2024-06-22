@@ -18,16 +18,23 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         if (sessionId != null) {
             response.setHeader("JSESSIONID", sessionId);
         }
-        System.out.println(sessionId);
-        System.out.println(authentication.getPrincipal().toString());
-        String redirectUrl = determineRedirectUrl(authentication, sessionId);
-        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+        Cookie userCookie = new Cookie("oAuth2User", authentication.getPrincipal().toString());
+        userCookie.setPath("/");
+        userCookie.setHttpOnly(true);
+        userCookie.setMaxAge(60 * 60);
+        response.addCookie(userCookie);
+        String redirectUrl = determineRedirectUrl(authentication);
+        try{
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId);
+
+        }catch (Exception e){
+            System.out.println("loi ne: " +e.getMessage());
+        }
     }
 
-    protected String determineRedirectUrl(Authentication authentication, String sessionId) {
+    protected String determineRedirectUrl(Authentication authentication) {
         String provider = authentication.getPrincipal().toString();
         String baseUrl = "https://animewebnew.netlify.app";
-
         if (provider.contains("google")) {
             return baseUrl + "/login-google";
         } else {
