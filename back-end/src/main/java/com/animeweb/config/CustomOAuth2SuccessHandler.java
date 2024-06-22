@@ -21,14 +21,9 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
             response.setHeader("JSESSIONID", sessionId);
         }
         String encodedUser = Base64.getEncoder().encodeToString(authentication.getPrincipal().toString().getBytes(StandardCharsets.UTF_8));
-        Cookie userCookie = new Cookie("oAuth2User", encodedUser);
-        userCookie.setPath("/");
-        userCookie.setHttpOnly(true);
-        userCookie.setMaxAge(60 * 60);
-        response.addCookie(userCookie);
         String redirectUrl = determineRedirectUrl(authentication);
         try{
-            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId);
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl + "?jsessionid="+sessionId+"&oAuth2User="+encodedUser);
 
         }catch (Exception e){
             System.out.println("loi ne: " +e.getMessage());
