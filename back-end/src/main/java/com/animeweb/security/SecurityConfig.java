@@ -70,11 +70,11 @@ public class SecurityConfig {
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(customOAuth2SuccessHandler)
-                        .permitAll());
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .authenticationEntryPoint(authenticationEntryPoint())
-//                        .accessDeniedHandler(accessDeniedHandler())
-//                );
+                        .permitAll())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint())
+                        .accessDeniedHandler(accessDeniedHandler())
+                );
         return http.build();
     }
 //        http.csrf(AbstractHttpConfigurer::disable)

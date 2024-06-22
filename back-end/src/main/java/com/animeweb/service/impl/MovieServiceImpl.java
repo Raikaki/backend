@@ -158,9 +158,12 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewDay() {
         List<Movie> topMovies = movieRepository.findTopMoviesByDate();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-
-        for (Movie m : topMovies
-        ) {
+        for (Movie m : topMovies) {
+            m.setGenres(genreRepository.getMovieGenre(m.getId()));
+            m.setCurrentChapters(chapterService.getChapters(m.getId()));
+            if (m.getSerie() != null) {
+                m.setSerie(serieService.findById(m.getSerie().getId()));
+            }
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
@@ -171,8 +174,12 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> topMovies = movieRepository.findTopMoviesMonth();
         List<MovieDTO> movieDTOS = new ArrayList<>();
 
-        for (Movie m : topMovies
-        ) {
+        for (Movie m : topMovies) {
+            m.setGenres(genreRepository.getMovieGenre(m.getId()));
+            m.setCurrentChapters(chapterService.getChapters(m.getId()));
+            if (m.getSerie() != null) {
+                m.setSerie(serieService.findById(m.getSerie().getId()));
+            }
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
@@ -182,9 +189,12 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewYear() {
         List<Movie> topMovies = movieRepository.findTopMoviesYear();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-
-        for (Movie m : topMovies
-        ) {
+        for (Movie m : topMovies) {
+            m.setGenres(genreRepository.getMovieGenre(m.getId()));
+            m.setCurrentChapters(chapterService.getChapters(m.getId()));
+            if (m.getSerie() != null) {
+                m.setSerie(serieService.findById(m.getSerie().getId()));
+            }
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;

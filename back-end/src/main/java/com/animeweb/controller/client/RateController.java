@@ -19,7 +19,7 @@
     import java.util.Optional;
 
     @RestController
-    @RequestMapping("/rates")
+        @RequestMapping("/rates")
     public class RateController {
         @Autowired
         private MovieService movieService;
