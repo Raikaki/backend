@@ -8,17 +8,20 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Component
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String sessionId = getSessionIdFromCookie(request);
         if (sessionId != null) {
             response.setHeader("JSESSIONID", sessionId);
         }
-        Cookie userCookie = new Cookie("oAuth2User", authentication.getPrincipal().toString());
+        String encodedUser = Base64.getEncoder().encodeToString(authentication.getPrincipal().toString().getBytes(StandardCharsets.UTF_8));
+        Cookie userCookie = new Cookie("oAuth2User", encodedUser);
         userCookie.setPath("/");
         userCookie.setHttpOnly(true);
         userCookie.setMaxAge(60 * 60);
