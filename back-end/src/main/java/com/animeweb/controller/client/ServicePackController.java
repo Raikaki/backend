@@ -52,6 +52,18 @@ public class ServicePackController {
         return ResponseEntity.ok(list);
     }
 
-
+    @GetMapping("/getAll/{idUser}")
+    public ResponseEntity<List<UserPackedDTO>> getAllByUser(@PathVariable("idUser") Long idUser) {
+        List<UserPacked> userPackeds = userPackedService.findAllUserPackedById(userService.findUserById(idUser));
+        List<UserPackedDTO> userPackedDTOS = new ArrayList<>();
+        for (UserPacked u : userPackeds) {
+            UserPackedDTO userPackedDTO = UserPackedMapper.mapToDTO(u);
+            userPackedDTO.setStatus(u.getStatus());
+            userPackedDTO.setId(u.getId());
+            userPackedDTO.setCreatedAt(u.getCreatedAt());
+            userPackedDTOS.add(userPackedDTO);
+        }
+        return ResponseEntity.ok(userPackedDTOS);
+    }
 
 }
