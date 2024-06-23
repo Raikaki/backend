@@ -44,6 +44,7 @@ public class MovieServiceImpl implements MovieService {
     private SerieService serieService;
     @Autowired
     private ChapterService chapterService;
+
     @Override
     public void save(Movie movie) {
         movieRepository.save(movie);
@@ -56,7 +57,9 @@ public class MovieServiceImpl implements MovieService {
         for (Movie movie : movieList) {
             movie.setGenres(genreRepository.getMovieGenre(movie.getId()));
             movie.setCurrentChapters(chapterService.getChapters(movie.getId()));
-           if(movie.getSerie()!=null) {movie.setSerie(serieService.findById(movie.getSerie().getId()));}
+            if (movie.getSerie() != null) {
+                movie.setSerie(serieService.findById(movie.getSerie().getId()));
+            }
             movieDTOList.add(MovieMapper.mapToMovieAdmin(movie));
         }
         return movieDTOList;
@@ -69,7 +72,9 @@ public class MovieServiceImpl implements MovieService {
         for (Movie movie : movieList) {
             movie.setGenres(genreRepository.getMovieGenre(movie.getId()));
             movie.setCurrentChapters(chapterService.getChapters(movie.getId()));
-            if(movie.getSerie()!=null) {movie.setSerie(serieService.findById(movie.getSerie().getId()));}
+            if (movie.getSerie() != null) {
+                movie.setSerie(serieService.findById(movie.getSerie().getId()));
+            }
             movieDTOList.add(MovieMapper.mapToMovieDTO(movie));
         }
         return movieDTOList;
@@ -92,11 +97,11 @@ public class MovieServiceImpl implements MovieService {
 
         List<MovieDTO> movieDTOS = new ArrayList<>();
         for (Movie m : moviePage.getContent()) {
-                m.setGenres(genreRepository.getMovieGenre(m.getId()));
-                m.setCurrentChapters(chapterService.getChapters(m.getId()));
-                if (m.getSerie() != null) {
-                    m.setSerie(serieService.findById(m.getSerie().getId()));
-                }
+            m.setGenres(genreRepository.getMovieGenre(m.getId()));
+            m.setCurrentChapters(chapterService.getChapters(m.getId()));
+            if (m.getSerie() != null) {
+                m.setSerie(serieService.findById(m.getSerie().getId()));
+            }
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
@@ -107,11 +112,11 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> list = movieRepository.findAll();
         List<MovieDTO> movieDTOS = new ArrayList<>();
         for (Movie m : list) {
-                m.setGenres(genreRepository.getMovieGenre(m.getId()));
-                m.setCurrentChapters(chapterService.getChapters(m.getId()));
-                if (m.getSerie() != null) {
-                    m.setSerie(serieService.findById(m.getSerie().getId()));
-                }
+            m.setGenres(genreRepository.getMovieGenre(m.getId()));
+            m.setCurrentChapters(chapterService.getChapters(m.getId()));
+            if (m.getSerie() != null) {
+                m.setSerie(serieService.findById(m.getSerie().getId()));
+            }
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
@@ -121,12 +126,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDTO findMovieById(Long movieId) {
         Movie movie = movieRepository.findById(movieId).orElse(null);
-        if(movie!=null){
-        movie.setGenres(genreRepository.getMovieGenre(movie.getId()));
-        movie.setCurrentChapters(chapterService.getChapters(movie.getId()));
-        if(movie.getSerie()!=null) {movie.setSerie(serieService.findById(movie.getSerie().getId()));}
-        return MovieMapper.mapToMovieDTO(movie);
-        }else{
+        if (movie != null) {
+            movie.setGenres(genreRepository.getMovieGenre(movie.getId()));
+            movie.setCurrentChapters(chapterService.getChapters(movie.getId()));
+            if (movie.getSerie() != null) {
+                movie.setSerie(serieService.findById(movie.getSerie().getId()));
+            }
+            return MovieMapper.mapToMovieDTO(movie);
+        } else {
             return null;
         }
 
@@ -135,7 +142,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDTO findMovieWatching(Long movieId) {
         Movie movie = movieRepository.findMovieWatching(movieId);
-        if(movie!=null) {
+        if (movie != null) {
             movie.setGenres(genreRepository.getMovieGenre(movie.getId()));
             movie.setCurrentChapters(chapterService.getChapters(movie.getId()));
             if (movie.getSerie() != null) {
@@ -159,14 +166,27 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewDay() {
         List<Movie> topMovies = movieRepository.findTopMoviesByDate();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
-        for (Movie m : limitedTopMovies) {
-            m.setGenres(genreRepository.getMovieGenre(m.getId()));
-            m.setCurrentChapters(chapterService.getChapters(m.getId()));
-            if (m.getSerie() != null) {
-                m.setSerie(serieService.findById(m.getSerie().getId()));
+        if (topMovies.size() > 5) {
+            topMovies = topMovies.subList(0, 5);
+            for (Movie m : topMovies) {
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
+                }
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
             }
-            movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+        } else {
+            for (Movie m : topMovies) {
+
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
+                }
+
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+            }
         }
         return movieDTOS;
     }
@@ -175,16 +195,29 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewMonth() {
         List<Movie> topMovies = movieRepository.findTopMoviesMonth();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
-        for (Movie m : limitedTopMovies) {
+        if (topMovies.size() > 5) {
+            topMovies = topMovies.subList(0, 5);
+            for (Movie m : topMovies) {
 
-            m.setGenres(genreRepository.getMovieGenre(m.getId()));
-            m.setCurrentChapters(chapterService.getChapters(m.getId()));
-            if (m.getSerie() != null) {
-                m.setSerie(serieService.findById(m.getSerie().getId()));
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
+                }
+
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+            }else{
+                for (Movie m : topMovies) {
+
+                    m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                    m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                    if (m.getSerie() != null) {
+                        m.setSerie(serieService.findById(m.getSerie().getId()));
+                    }
+
+                    movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+                }
             }
-
-            movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
     }
@@ -192,15 +225,28 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDTO> getTopViewYear() {
         List<Movie> topMovies = movieRepository.findTopMoviesYear();
-        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        for (Movie m : limitedTopMovies) {
-            m.setGenres(genreRepository.getMovieGenre(m.getId()));
-            m.setCurrentChapters(chapterService.getChapters(m.getId()));
-            if (m.getSerie() != null) {
-                m.setSerie(serieService.findById(m.getSerie().getId()));
+        if (topMovies.size() > 5) {
+            topMovies = topMovies.subList(0, 5);
+            for (Movie m : topMovies) {
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
+                }
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
             }
-            movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+        } else {
+            for (Movie m : topMovies) {
+
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
+                }
+
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+            }
         }
         return movieDTOS;
     }
@@ -209,6 +255,7 @@ public class MovieServiceImpl implements MovieService {
     public boolean findByName(String name) {
         return movieRepository.existsByNameAndStatus(name, true);
     }
+
     @Override
     public boolean findByNameNotThis(Long idMovie, String name) {
         return movieRepository.existsByNameAndStatusTrueAndIdNot(name, idMovie);
@@ -223,7 +270,6 @@ public class MovieServiceImpl implements MovieService {
     public Movie findById(Long id) {
         return movieRepository.findMovieByIdAndStatusTrue(id);
     }
-
 
 
     @Override
@@ -264,8 +310,8 @@ public class MovieServiceImpl implements MovieService {
 
         List<Movie> movies = movieRepository.findAllMovieViewedByUserId(userId);
         for (Movie m : movies
-        ){
-          movieDTOS.add(MovieMapper.mapToMovieDTO(m))  ;
+        ) {
+            movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
     }
