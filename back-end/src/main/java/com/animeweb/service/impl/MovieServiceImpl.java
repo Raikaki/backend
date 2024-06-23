@@ -206,17 +206,17 @@ public class MovieServiceImpl implements MovieService {
                 }
 
                 movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+            }
             }else{
-                for (Movie m : topMovies) {
+            for (Movie m : topMovies) {
 
-                    m.setGenres(genreRepository.getMovieGenre(m.getId()));
-                    m.setCurrentChapters(chapterService.getChapters(m.getId()));
-                    if (m.getSerie() != null) {
-                        m.setSerie(serieService.findById(m.getSerie().getId()));
-                    }
-
-                    movieDTOS.add(MovieMapper.mapToMovieDTO(m));
+                m.setGenres(genreRepository.getMovieGenre(m.getId()));
+                m.setCurrentChapters(chapterService.getChapters(m.getId()));
+                if (m.getSerie() != null) {
+                    m.setSerie(serieService.findById(m.getSerie().getId()));
                 }
+
+                movieDTOS.add(MovieMapper.mapToMovieDTO(m));
             }
         }
         return movieDTOS;
