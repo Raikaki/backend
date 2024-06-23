@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -158,7 +159,8 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewDay() {
         List<Movie> topMovies = movieRepository.findTopMoviesByDate();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        for (Movie m : topMovies) {
+        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
+        for (Movie m : limitedTopMovies) {
             m.setGenres(genreRepository.getMovieGenre(m.getId()));
             m.setCurrentChapters(chapterService.getChapters(m.getId()));
             if (m.getSerie() != null) {
@@ -173,13 +175,15 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieDTO> getTopViewMonth() {
         List<Movie> topMovies = movieRepository.findTopMoviesMonth();
         List<MovieDTO> movieDTOS = new ArrayList<>();
+        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
+        for (Movie m : limitedTopMovies) {
 
-        for (Movie m : topMovies) {
             m.setGenres(genreRepository.getMovieGenre(m.getId()));
             m.setCurrentChapters(chapterService.getChapters(m.getId()));
             if (m.getSerie() != null) {
                 m.setSerie(serieService.findById(m.getSerie().getId()));
             }
+
             movieDTOS.add(MovieMapper.mapToMovieDTO(m));
         }
         return movieDTOS;
@@ -188,8 +192,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDTO> getTopViewYear() {
         List<Movie> topMovies = movieRepository.findTopMoviesYear();
+        List<Movie> limitedTopMovies = topMovies.stream().limit(5).collect(Collectors.toList());
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        for (Movie m : topMovies) {
+        for (Movie m : limitedTopMovies) {
             m.setGenres(genreRepository.getMovieGenre(m.getId()));
             m.setCurrentChapters(chapterService.getChapters(m.getId()));
             if (m.getSerie() != null) {

@@ -18,11 +18,11 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
     Movie findMovieWatching(@Param("movieId") Long movieId);
     @Query("select m from Movie m where m.name like %:term%" )
     List<Movie> findByNameContainingIgnoreCase(@Param("term")String term);
-    @Query("SELECT  m FROM Movie m JOIN View v ON m.id = v.movie.id WHERE DATE(v.watchAt) = CURDATE() AND m.status = true ORDER BY SIZE(m.views) DESC limit 5")
+    @Query("SELECT  m FROM Movie m JOIN View v ON m.id = v.movie.id WHERE DATE(v.watchAt) = CURDATE() AND m.status = true ORDER BY SIZE(m.views) DESC ")
     List<Movie> findTopMoviesByDate();
-    @Query("SELECT m FROM Movie m JOIN View v ON m.id = v.movie.id   WHERE YEAR(v.watchAt) = YEAR(CURDATE()) AND MONTH(v.watchAt) = MONTH(CURDATE()) AND m.status = true ORDER BY SIZE(m.views) DESC limit 5")
+    @Query("SELECT m FROM Movie m JOIN View v ON m.id = v.movie.id   WHERE YEAR(v.watchAt) = YEAR(CURDATE()) AND MONTH(v.watchAt) = MONTH(CURDATE()) AND m.status = true ORDER BY SIZE(m.views) DESC ")
     List<Movie> findTopMoviesMonth();
-    @Query("SELECT m FROM Movie m JOIN View v ON m.id = v.movie.id  WHERE YEAR(v.watchAt) = YEAR(CURDATE()) AND m.status = true ORDER BY SIZE(m.views) DESC limit 5")
+    @Query("SELECT m FROM Movie m JOIN View v ON m.id = v.movie.id  WHERE YEAR(v.watchAt) = YEAR(CURDATE()) AND m.status = true ORDER BY SIZE(m.views) DESC ")
     List<Movie> findTopMoviesYear();
     @Query("select m from Movie m  join Serie s on m.serie.id=s.id")
     List<Movie> findAllSeries(Long movieId);
