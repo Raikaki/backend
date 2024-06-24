@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission,Long> {
     Permission findByName(String name);
-    @Query(value = "select * from Permissions p where p.id not in (select permissions_id from roles_permissions where role_id = :roleId)",nativeQuery = true)
+    @Query(value = "select * from permissions p where p.id not in (select permissions_id from roles_permissions where role_id = :roleId)",nativeQuery = true)
     List<Permission> findEnable(Long roleId);
 }
